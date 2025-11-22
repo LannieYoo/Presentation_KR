@@ -812,7 +812,7 @@ body {
 
 /* 코드 스타일 */
 .code-example {
-    background: rgba(30, 41, 59, 0.8);
+    background: rgb(1 12 31 / 93%);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: 16px 24px;
@@ -832,7 +832,7 @@ body {
 }
 
 .code-block {
-    background: rgba(30, 41, 59, 0.85);
+    background: rgb(1 12 31 / 93%);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 28px;
