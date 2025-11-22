@@ -12,16 +12,49 @@
 
 <div class="content-section">
     <h2 class="content-title">Helpful Tips</h2>
-    <div class="info-box">
-        <ul class="info-list">
-            <li><strong>Start small</strong> - Use just 2 places instead of 5, or 2 objects instead of 10. This makes it easier to understand and test your code. Once it works with a small problem, you can add more complexity later.</li>
-            <li><strong>Draw pictures</strong> - Draw each situation on paper with arrows showing what actions change. Visualizing the states helps you see what needs to be true before an action and what changes after. This makes writing the Prolog rules much clearer.</li>
-            <li><strong>Write things down first</strong> - List all objects, places, and facts before writing code. Make a simple table: Objects | Locations | Facts | Actions. This helps you organize your thoughts and avoid missing important parts.</li>
-            <li><strong>Think step by step</strong> - For each action, ask: What must be true before? What changes after? What stays the same? If you can explain your action in simple words like a story, it will be easier to write the Prolog code correctly.</li>
-            <li><strong>Test one thing at a time</strong> - Test single actions first, like checking if the monkey can move, before testing the whole plan. Check the starting situation, then test if actions are allowed, then see what changes. This helps you find mistakes quickly.</li>
-            <li><strong>Use good names</strong> - Write <code>at(robot, l1)</code> instead of short names like <code>a(r, 1)</code>. Clear names make your code easier to read and understand later. When you come back to your code after a few days, good names will help you remember what everything means.</li>
-            <li><strong>Check systematically when debugging</strong> - If no plan is found, check in order: starting situation → goal condition → action rules → what changes after actions. Following this order helps you find the problem faster instead of checking randomly.</li>
-        </ul>
+    <div class="tips-grid">
+        <div class="tip-card">
+            <div class="tip-number">1</div>
+            <h3 class="tip-title">Start Small</h3>
+            <p class="tip-description">Use just 2 places instead of 5, or 2 objects instead of 10.</p>
+            <p class="tip-benefit">This makes it easier to understand and test your code. Once it works, add more complexity later.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">2</div>
+            <h3 class="tip-title">Draw Pictures</h3>
+            <p class="tip-description">Draw each situation on paper with arrows showing what actions change.</p>
+            <p class="tip-benefit">Visualizing the states helps you see what needs to be true before an action and what changes after.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">3</div>
+            <h3 class="tip-title">Write Things Down First</h3>
+            <p class="tip-description">List all objects, places, and facts before writing code.</p>
+            <p class="tip-benefit">Make a simple table: Objects | Locations | Facts | Actions. This helps you organize your thoughts.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">4</div>
+            <h3 class="tip-title">Think Step by Step</h3>
+            <p class="tip-description">For each action, ask: What must be true before? What changes after? What stays the same?</p>
+            <p class="tip-benefit">If you can explain your action in simple words like a story, it will be easier to write the Prolog code correctly.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">5</div>
+            <h3 class="tip-title">Test One Thing at a Time</h3>
+            <p class="tip-description">Test single actions first, like checking if the monkey can move, before testing the whole plan.</p>
+            <p class="tip-benefit">Check the starting situation → test if actions are allowed → see what changes. This helps you find mistakes quickly.</p>
+        </div>
+        
+        <div class="tip-card">
+            <div class="tip-number">6</div>
+            <h3 class="tip-title">Use Good Names</h3>
+            <p class="tip-description">Write <code>at(robot, l1)</code> instead of short names like <code>a(r, 1)</code>.</p>
+            <p class="tip-benefit">Clear names make your code easier to read and understand later. Good names help you remember what everything means.</p>
+        </div>
+        
     </div>
 </div>
 
