@@ -171,7 +171,8 @@ body {
 }
 
 .nav-link.active {
-    background: rgba(255, 255, 255, 0.15);
+    /*background: rgba(255, 255, 255, 0.15);*/
+    background: rgb(225 106 4 / 95%);
     color: white;
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
