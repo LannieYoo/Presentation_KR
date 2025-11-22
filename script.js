@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Initialize navigation functionality
         initializeNavigation();
         
+        // Initialize hamburger menu
+        initializeHamburgerMenu();
+        
         // Show home page
         const homePage = document.getElementById('home');
         if (homePage) {
@@ -113,7 +116,7 @@ async function buildContentPage(page) {
     let contentHTML = `
         <div class="page-header">
             <h1 class="page-title">${page.title}</h1>
-            ${page.speaker ? `<p class="page-speaker">Speaker: ${page.speaker}</p>` : ''}
+            ${page.speaker ? `<p class="page-speaker"><span class="speaker-label">Speaker: </span><span class="speaker-name">${page.speaker}</span></p>` : ''}
         </div>
         <div class="page-content">
     `;
@@ -166,7 +169,7 @@ function buildReferencesPage(page) {
                     <ul class="info-list" style="list-style: none; padding-left: 0;">
                         ${presentationData.references.map(ref => `
                             <li style="padding-left: 0; margin-bottom: 20px;">
-                                ${ref.text}${ref.url ? ` <a href="${ref.url}" target="_blank" style="color: #2563eb; text-decoration: underline;">${ref.url}</a>` : ''}
+                                ${ref.text}${ref.url ? ` <a href="${ref.url}" target="_blank" class="reference-link" style="color: #2563eb; text-decoration: underline;"><span class="reference-url">${ref.url}</span><span class="reference-icon">↗</span></a>` : ''}
                             </li>
                         `).join('')}
                     </ul>
@@ -342,5 +345,47 @@ function initializeNavigation() {
     
     // Export updateNavButtons for use in switchPage
     window.updateNavButtons = updateNavButtons;
+}
+
+// Initialize hamburger menu
+function initializeHamburgerMenu() {
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (!hamburgerMenu || !navMenu) return;
+    
+    hamburgerMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hamburgerMenu.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+    
+    // Close menu when clicking on a nav link
+    function setupNavLinks() {
+        const navLinks = navMenu.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+    
+    // Setup nav links immediately and also after navigation is built
+    setupNavLinks();
+    
+    // Also setup when navigation is updated
+    const observer = new MutationObserver(() => {
+        setupNavLinks();
+    });
+    observer.observe(navMenu, { childList: true, subtree: true });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!hamburgerMenu.contains(e.target) && !navMenu.contains(e.target)) {
+            hamburgerMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
 }
 
