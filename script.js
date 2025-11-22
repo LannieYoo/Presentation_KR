@@ -55,14 +55,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // 스크롤을 최상단으로 이동하는 함수
+    function scrollToTop() {
+        // 모든 가능한 스크롤 컨테이너를 최상단으로
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // main-container도 확인
+        const mainContainer = document.querySelector('.main-container');
+        if (mainContainer) {
+            mainContainer.scrollTop = 0;
+        }
+        
+        // 모든 스크롤 가능한 요소 확인
+        const scrollableElements = document.querySelectorAll('*');
+        scrollableElements.forEach(el => {
+            if (el.scrollTop > 0) {
+                el.scrollTop = 0;
+            }
+        });
+    }
+    
     // 페이지 전환 함수
     function switchPage(pageId, clickedLink) {
         console.log('Switching to page:', pageId);
         
-        // 먼저 스크롤을 즉시 최상단으로 이동 (여러 방법으로 확실하게)
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
+        // 먼저 스크롤을 즉시 최상단으로 이동
+        scrollToTop();
         
         // 모든 페이지 숨기기
         allPages.forEach(page => {
@@ -75,26 +95,20 @@ document.addEventListener('DOMContentLoaded', function() {
         if (targetPage) {
             targetPage.style.display = 'block';
             
-            // 스크롤을 다시 한 번 최상단으로 (페이지 표시 직후)
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            // 페이지 표시 직후 스크롤
+            scrollToTop();
             
             // 다음 프레임에서 active 클래스 추가하여 페이드 인
             requestAnimationFrame(() => {
                 targetPage.classList.add('active');
-                // 페이지 표시 후 다시 한 번 최상단으로 스크롤 (확실하게)
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
+                scrollToTop();
             });
             
-            // 추가로 약간의 지연 후에도 확인
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            }, 100);
+            // 여러 번 확인 (더 확실하게)
+            setTimeout(() => scrollToTop(), 50);
+            setTimeout(() => scrollToTop(), 100);
+            setTimeout(() => scrollToTop(), 200);
+            setTimeout(() => scrollToTop(), 300);
             
             console.log('Page shown:', pageId);
             
@@ -133,6 +147,9 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            
+            // 메뉴 클릭 즉시 최상단으로 스크롤 (함수 사용)
+            scrollToTop();
             
             const href = this.getAttribute('href');
             if (!href || !href.startsWith('#')) return;
