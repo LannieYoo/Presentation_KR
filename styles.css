@@ -924,7 +924,7 @@ body {
     left: 24px;
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, #d84b0c 0%, #b83d0a 100%);
+    background: rgb(225 106 4 / 95%);
     color: white;
     border-radius: 12px;
     display: flex;
@@ -932,8 +932,8 @@ body {
     justify-content: center;
     font-size: 22px;
     font-weight: 800;
-    box-shadow: 0 6px 20px rgba(216, 75, 12, 0.25), 
-                0 2px 8px rgba(184, 61, 10, 0.15),
+    box-shadow: 0 6px 20px rgba(225, 106, 4, 0.25), 
+                0 2px 8px rgba(225, 106, 4, 0.15),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.2);
     transform: rotate(-5deg);
@@ -942,8 +942,8 @@ body {
 
 .tip-card:hover .tip-number {
     transform: rotate(0deg) scale(1.1);
-    box-shadow: 0 8px 24px rgba(216, 75, 12, 0.35), 
-                0 4px 12px rgba(184, 61, 10, 0.25),
+    box-shadow: 0 8px 24px rgba(225, 106, 4, 0.35), 
+                0 4px 12px rgba(225, 106, 4, 0.25),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
