@@ -883,16 +883,13 @@ body {
 }
 
 .main-point-box {
-    background: linear-gradient(135deg, rgba(203, 213, 225, 0.4) 0%, rgba(226, 232, 240, 0.4) 100%);
+    background: #ffffff;
     padding: 40px 50px;
     border-radius: 24px;
     margin: 24px 0;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 
+                0 8px 32px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -915,14 +912,13 @@ body {
 .main-point-text {
     font-size: 22px;
     font-weight: 500;
-    color: #ffffff;
+    color: #1e293b;
     text-align: center;
     line-height: 1.8;
     margin: 0;
     position: relative;
     z-index: 1;
     letter-spacing: 0.3px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .note-text {
