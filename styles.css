@@ -701,6 +701,29 @@ body {
     margin-top: 0;
     color: #0f172a;
     letter-spacing: -0.2px;
+    position: relative;
+    padding-left: 32px;
+}
+
+.info-box h3::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    color: #f32c05;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    text-shadow: 0.5px 0.5px 0.5px rgba(243, 44, 5, 0.3);
+    flex-shrink: 0;
 }
 
 .tips-section-title {
@@ -900,7 +923,7 @@ body {
     left: 24px;
     width: 48px;
     height: 48px;
-    background: linear-gradient(135deg, #0a397c 0%, #082d63 100%);
+    background: linear-gradient(135deg, #d84b0c 0%, #b83d0a 100%);
     color: white;
     border-radius: 12px;
     display: flex;
@@ -908,8 +931,8 @@ body {
     justify-content: center;
     font-size: 22px;
     font-weight: 800;
-    box-shadow: 0 6px 20px rgba(10, 57, 124, 0.35), 
-                0 2px 8px rgba(8, 45, 99, 0.25),
+    box-shadow: 0 6px 20px rgba(216, 75, 12, 0.25), 
+                0 2px 8px rgba(184, 61, 10, 0.15),
                 inset 0 1px 0 rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.2);
     transform: rotate(-5deg);
@@ -918,8 +941,8 @@ body {
 
 .tip-card:hover .tip-number {
     transform: rotate(0deg) scale(1.1);
-    box-shadow: 0 8px 24px rgba(10, 57, 124, 0.45), 
-                0 4px 12px rgba(8, 45, 99, 0.35),
+    box-shadow: 0 8px 24px rgba(216, 75, 12, 0.35), 
+                0 4px 12px rgba(184, 61, 10, 0.25),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
