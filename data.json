@@ -1,0 +1,108 @@
+{
+  "presentation": {
+    "title": "CST8503 Presentation",
+    "subtitle": "Knowledge Representation and Planning",
+    "subtitleSecondary": "Solving planning problems with Knowledge Representation and Prolog"
+  },
+  "navigation": [
+    { "id": "home", "label": "Home", "href": "#home" },
+    { "id": "introduction", "label": "KR Basics", "href": "#introduction" },
+    { "id": "prolog-solutions", "label": "Prolog", "href": "#prolog-solutions" },
+    { "id": "tips-practices", "label": "Tips", "href": "#tips-practices" },
+    { "id": "conclusion", "label": "Conclusion", "href": "#conclusion" },
+    { "id": "references", "label": "References", "href": "#references" }
+  ],
+  "pages": [
+    {
+      "id": "home",
+      "type": "home",
+      "title": "CST8503 Presentation",
+      "subtitle": "Knowledge Representation and Planning",
+      "subtitleSecondary": "Solving planning problems with Knowledge Representation and Prolog"
+    },
+    {
+      "id": "introduction",
+      "type": "content",
+      "title": "Introduction & KR Basics",
+      "speaker": "Jiaxing Yi",
+      "contentFile": "content/introduction.html"
+    },
+    {
+      "id": "prolog-solutions",
+      "type": "content",
+      "title": "Prolog Solutions",
+      "speaker": "Peng Wang",
+      "contentFile": "content/prolog-solutions.html"
+    },
+    {
+      "id": "tips-practices",
+      "type": "content",
+      "title": "Tips and Best Practices",
+      "speaker": "Hye Ran Yoo",
+      "contentFile": "content/tips-practices.html"
+    },
+    {
+      "id": "conclusion",
+      "type": "content",
+      "title": "Conclusion",
+      "speaker": "Jiaxing Yi",
+      "mainPoint": "Knowledge Representation provides a structured way to model the world using facts and logical rules, enabling systematic problem-solving through planning rather than random trial and error.",
+      "keyTakeaways": [
+        {
+          "title": "1. Knowledge Representation",
+          "description": "Provides a way to model the world using facts and logical rules"
+        },
+        {
+          "title": "2. Planning",
+          "description": "Involves finding a sequence of actions from an initial state to a goal state"
+        },
+        {
+          "title": "3. Prolog's Recursive Structure",
+          "description": "Makes it natural for implementing planners"
+        }
+      ]
+    },
+    {
+      "id": "references",
+      "type": "references",
+      "title": "References"
+    }
+  ],
+  "teamMembers": [
+    {
+      "name": "Jiaxing Yi",
+      "link": "#introduction"
+    },
+    {
+      "name": "Peng Wang",
+      "link": "#prolog-solutions"
+    },
+    {
+      "name": "Hye Ran Yoo",
+      "link": "#tips-practices"
+    }
+  ],
+  "references": [
+    {
+      "text": "SWI-Prolog. (n.d.). <em>SWI-Prolog documentation</em>.",
+      "url": "https://www.swi-prolog.org/pldoc/doc_for?object=manual"
+    },
+    {
+      "text": "Russell, S., & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th ed.). Pearson.",
+      "url": "https://aima.cs.berkeley.edu/"
+    },
+    {
+      "text": "Wikipedia contributors. (2024, January 15). <em>Automated planning and scheduling</em>. Wikipedia.",
+      "url": "https://en.wikipedia.org/wiki/Automated_planning_and_scheduling"
+    },
+    {
+      "text": "Wikipedia contributors. (2024, January 10). <em>Knowledge representation and reasoning</em>. Wikipedia.",
+      "url": "https://en.wikipedia.org/wiki/Knowledge_representation_and_reasoning"
+    },
+    {
+      "text": "Algonquin College. (n.d.). <em>CST8503 Knowledge Representation and Planning</em> [Course materials].",
+      "url": null
+    }
+  ]
+}
+

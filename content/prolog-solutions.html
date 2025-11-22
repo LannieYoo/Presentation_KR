@@ -1,0 +1,126 @@
+<div class="content-section">
+    <h2 class="content-title">Big Picture</h2>
+    <div class="info-box">
+        <p>In Prolog the planning system is built from:</p>
+        <ul class="info-list">
+            <li>State representation</li>
+            <li>Action representation</li>
+            <li>Preconditions</li>
+            <li>Effects</li>
+            <li>And a planner predicate that uses all of them together</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">How to Show States</h2>
+    <div class="info-box">
+        <p>A state is shown using a situation variable <code>S</code> and facts that describe what is true in <code>S</code>.</p>
+        
+        <h3>Common facts:</h3>
+        <ul class="info-list">
+            <li>Robot is at some location</li>
+            <li>Locations are connected</li>
+        </ul>
+
+        <h3>Starting state:</h3>
+        <p>A special situation, often called <code>s0</code>, lists what is true at the beginning.</p>
+
+        <h3>Goal condition:</h3>
+        <p>A fact or a set of facts that must be true at the end. For Simple Navigation: robot is at the target location.</p>
+        
+        <h3>Understanding Facts:</h3>
+        <p>Facts are things that can change over time. They describe what is true in some states but not in others. Examples include <code>at(robot, l1)</code> (robot is at location 1).</p>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">Actions in Prolog</h2>
+    <div class="info-box">
+        <p>Each action is written as a Prolog term.</p>
+        <p><strong>Example actions:</strong></p>
+        <ul class="info-list">
+            <li><code>move(From, To)</code> - robot moves from one location to another</li>
+        </ul>
+        <p>For each action we later write:</p>
+        <ul class="info-list">
+            <li>When it is allowed (what must be true before)</li>
+            <li>How it changes the state (what becomes true after)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">Key Planning Rules</h2>
+    <div class="predicates-grid">
+        <div class="info-box">
+            <h3>Precondition Rule</h3>
+            <p>Checks when an action is allowed in a state</p>
+            <div class="code-example">
+                <code>poss(Action, S)</code>
+            </div>
+            <p class="note-text">Returns true if the action is possible in state S</p>
+        </div>
+        <div class="info-box">
+            <h3>Effect Rule</h3>
+            <p>Shows how an action changes one state into another</p>
+            <div class="code-example">
+                <code>result(Action, S1, S2)</code>
+            </div>
+            <p class="note-text">S2 is the new state after doing Action in state S1</p>
+        </div>
+        <div class="info-box">
+            <h3>Planner Rule</h3>
+            <p>Finds which list of actions is a plan from a state to a goal</p>
+            <div class="code-example">
+                <code>plan(S, G, Plan)</code>
+            </div>
+            <p class="note-text">Plan is a list of actions that go from state S to goal G</p>
+        </div>
+        <div class="info-box">
+            <h3>Holds Rule</h3>
+            <p>Checks if a fact (goal) is true in a given state</p>
+            <div class="code-example">
+                <code>holds(Fluent, S)</code>
+            </div>
+            <p class="note-text">Used to check if goal G is already true in state S</p>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">How Planning Uses Repetition</h2>
+    <div class="info-box">
+        <h3>Planning Example:</h3>
+        <div class="code-block">
+            <pre><code>% Base case: goal already satisfied
+plan(S, G, []) :-
+    holds(G, S).
+
+% Recursive case: find action and continue planning
+plan(S, G, [A|Plan]) :-
+    poss(A, S),
+    result(A, S, S1),
+    plan(S1, G, Plan).</code></pre>
+        </div>
+
+        <h3>How This Works:</h3>
+        <ul class="info-list">
+            <li><strong>Base case:</strong> If goal G is already true in state S, the plan is empty <code>[]</code></li>
+            <li><strong>Recursive case:</strong> Choose an action A that is possible in S, find the next state S1, then find a plan from S1 to G, and put A together with the rest of the plan</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">How Prolog Searches for a Plan</h2>
+    <div class="info-box">
+        <p>Prolog tries one path at a time, and if it fails, it tries a different path.</p>
+        <ul class="info-list">
+            <li>If the goal is already true in the current state → the plan is empty</li>
+            <li>Otherwise → choose an action that is possible in this state, find the next state, then continue planning from that next state</li>
+            <li>If this path does not work, Prolog goes back and tries another action or a different sequence</li>
+        </ul>
+    </div>
+</div>
+

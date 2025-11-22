@@ -1,0 +1,81 @@
+<div class="content-section">
+    <h2 class="content-title">Presentation Context</h2>
+    <div class="info-box">
+        <p><strong>Course:</strong> CST8503 Knowledge Representation and Planning</p>
+        <p><strong>Topic:</strong> How to solve planning problems using Knowledge Representation and Prolog planning</p>
+        <h3>Audience:</h3>
+        <ul class="info-list">
+            <li>Students who already did CST8503 labs and assignments</li>
+            <li>Students who want one clear big picture of planning with Prolog</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">Goals of This Presentation</h2>
+    <div class="info-box">
+        <p>After this talk, the audience should:</p>
+        <ul class="info-list">
+            <li>Know what Knowledge Representation means in this course</li>
+            <li>Know what a planning problem is in Artificial Intelligence</li>
+            <li>Have a simple picture of how Prolog can search for a plan</li>
+            <li>Learn practical tips for solving planning problems with Prolog</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">What is Knowledge Representation</h2>
+    <div class="info-box">
+        <h3>Basic Idea</h3>
+        <p>Knowledge Representation is a way to describe facts about the world so that a computer can reason logically about them.</p>
+        
+        <h3>We Use:</h3>
+        <ul class="info-list">
+            <li><strong>Objects:</strong> agents, objects, locations (e.g., robot, items, rooms)</li>
+            <li><strong>Relations and Properties:</strong>
+                <ul>
+                    <li><code>at(object, location)</code> - where something is</li>
+                    <li><code>has(agent, item)</code> - what an agent holds</li>
+                    <li><code>on(object1, object2)</code> - spatial relationships</li>
+                </ul>
+            </li>
+            <li><strong>States:</strong> Snapshots of what is true now, described by fluents (facts that can change over time)</li>
+        </ul>
+
+        <h3>Good Knowledge Representation makes it clear:</h3>
+        <ul class="info-list">
+            <li>What is true in the current state</li>
+            <li>Which actions are allowed</li>
+            <li>What the world looks like after an action</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">What is a Planning Problem</h2>
+    <div class="info-box">
+        <p><strong>Planning problem in Artificial Intelligence:</strong></p>
+        <ul class="info-list">
+            <li>Given an initial state</li>
+            <li>Given a goal condition</li>
+            <li>Find a sequence of actions that leads from start to goal</li>
+        </ul>
+
+        <h3>Examples:</h3>
+        <ul class="info-list">
+            <li>Robot moving through rooms</li>
+            <li>Blocks World</li>
+            <li>Navigation problems</li>
+        </ul>
+
+        <h3>Key Elements:</h3>
+        <ul class="info-list">
+            <li>State</li>
+            <li>Actions with preconditions and effects</li>
+            <li>Transitions between states</li>
+            <li>Plan as a sequence of actions</li>
+        </ul>
+    </div>
+</div>
+

@@ -1,17 +1,186 @@
-// 네비게이션 메뉴 클릭 이벤트
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing navigation...');
+// Global variables
+let presentationData = null;
+let pageOrder = [];
+
+// Load JSON data and initialize
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('DOM loaded, loading data...');
     
-    // 모든 페이지 숨기기 (초기화)
-    const allPages = document.querySelectorAll('.page');
-    allPages.forEach(page => {
-        page.style.display = 'none';
+    try {
+        const response = await fetch('data.json');
+        presentationData = await response.json();
+        console.log('Data loaded:', presentationData);
+        
+        // Initialize page order from navigation
+        pageOrder = presentationData.navigation.map(nav => nav.id);
+        
+        // Build navigation
+        buildNavigation();
+        
+        // Build pages
+        await buildPages();
+        
+        // Initialize navigation functionality
+        initializeNavigation();
+        
+        // Show home page
+        const homePage = document.getElementById('home');
+        if (homePage) {
+            homePage.style.display = 'block';
+            homePage.classList.add('active');
+            updateNavButtons('home');
+        }
+        
+        console.log('Presentation initialized');
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+});
+
+// Build navigation menu
+function buildNavigation() {
+    const navMenu = document.getElementById('nav-menu');
+    if (!navMenu || !presentationData) return;
+    
+    navMenu.innerHTML = '';
+    presentationData.navigation.forEach((nav, index) => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = nav.href;
+        a.className = 'nav-link';
+        if (index === 0) a.classList.add('active');
+        a.textContent = nav.label;
+        li.appendChild(a);
+        navMenu.appendChild(li);
     });
+}
+
+// Build all pages
+async function buildPages() {
+    const mainContainer = document.getElementById('main-container');
+    if (!mainContainer || !presentationData) return;
     
-    // 페이지 순서 정의
-    const pageOrder = ['home', 'introduction', 'prolog-solutions', 'tips-practices', 'conclusion', 'references'];
+    for (const page of presentationData.pages) {
+        const section = document.createElement('section');
+        section.id = page.id;
+        section.className = 'page';
+        
+        if (page.type === 'home') {
+            section.innerHTML = buildHomePage(page);
+        } else if (page.type === 'content') {
+            section.innerHTML = await buildContentPage(page);
+        } else if (page.type === 'references') {
+            section.innerHTML = buildReferencesPage(page);
+        }
+        
+        mainContainer.appendChild(section);
+    }
+}
+
+// Build home page
+function buildHomePage(page) {
+    return `
+        <div class="hero-section">
+            <div class="hero-image-container">
+                <div class="hero-background"></div>
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1 class="main-title">${presentationData.presentation.title}</h1>
+                    <p class="subtitle">${presentationData.presentation.subtitle}</p>
+                    <p class="subtitle-secondary">${presentationData.presentation.subtitleSecondary}</p>
+                </div>
+            </div>
+        </div>
+        <div class="page-content team-section-bg">
+            <div class="team-section">
+                <h2 class="section-title">Team Members</h2>
+                <div class="team-grid">
+                    ${presentationData.teamMembers.map(member => `
+                        <a href="${member.link}" class="team-card-link">
+                            <div class="team-card">
+                                <div class="team-name">${member.name}</div>
+                            </div>
+                        </a>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Build content page
+async function buildContentPage(page) {
+    let contentHTML = `
+        <div class="page-header">
+            <h1 class="page-title">${page.title}</h1>
+            ${page.speaker ? `<p class="page-speaker">Speaker: ${page.speaker}</p>` : ''}
+        </div>
+        <div class="page-content">
+    `;
     
-    // 이전/다음 버튼 및 페이지 인디케이터 업데이트 함수
+    if (page.contentFile) {
+        try {
+            const response = await fetch(page.contentFile);
+            const content = await response.text();
+            contentHTML += content;
+        } catch (error) {
+            console.error(`Error loading content file ${page.contentFile}:`, error);
+        }
+    } else if (page.mainPoint) {
+        // Conclusion page
+        contentHTML += `
+            <div class="content-section">
+                <h2 class="content-title">Main Point</h2>
+                <div class="main-point-box">
+                    <p class="main-point-text">${page.mainPoint}</p>
+                </div>
+            </div>
+            <div class="content-section">
+                <h2 class="content-title">Key Takeaways</h2>
+                <div class="takeaways-grid">
+                    ${page.keyTakeaways.map(takeaway => `
+                        <div class="info-box">
+                            <h3>${takeaway.title}</h3>
+                            <p>${takeaway.description}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    contentHTML += '</div>';
+    return contentHTML;
+}
+
+// Build references page
+function buildReferencesPage(page) {
+    return `
+        <div class="page-header">
+            <h1 class="page-title">${page.title}</h1>
+        </div>
+        <div class="page-content">
+            <div class="content-section">
+                <h2 class="content-title">References</h2>
+                <div class="info-box">
+                    <ul class="info-list" style="list-style: none; padding-left: 0;">
+                        ${presentationData.references.map(ref => `
+                            <li style="padding-left: 0; margin-bottom: 20px;">
+                                ${ref.text}${ref.url ? ` <a href="${ref.url}" target="_blank" style="color: #2563eb; text-decoration: underline;">${ref.url}</a>` : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Initialize navigation functionality
+function initializeNavigation() {
+    const allPages = document.querySelectorAll('.page');
+    
+    // Update nav buttons function
     function updateNavButtons(currentPageId) {
         const prevBtn = document.getElementById('nav-prev');
         const nextBtn = document.getElementById('nav-next');
@@ -22,13 +191,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentIndex = pageOrder.indexOf(currentPageId);
         const totalPages = pageOrder.length;
         
-        // 페이지 인디케이터 업데이트
         if (pageIndicator) {
             const currentPageNum = currentIndex + 1;
             pageIndicator.textContent = `${currentPageNum} / ${totalPages}`;
         }
         
-        // 이전 버튼 활성화/비활성화
         if (currentIndex > 0) {
             prevBtn.disabled = false;
             prevBtn.onclick = () => {
@@ -41,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
             prevBtn.onclick = null;
         }
         
-        // 다음 버튼 활성화/비활성화
         if (currentIndex < pageOrder.length - 1) {
             nextBtn.disabled = false;
             nextBtn.onclick = () => {
@@ -55,20 +221,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 스크롤을 최상단으로 이동하는 함수
+    // Scroll to top function
     function scrollToTop() {
-        // 모든 가능한 스크롤 컨테이너를 최상단으로
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
         
-        // main-container도 확인
         const mainContainer = document.querySelector('.main-container');
         if (mainContainer) {
             mainContainer.scrollTop = 0;
         }
         
-        // 모든 스크롤 가능한 요소 확인
         const scrollableElements = document.querySelectorAll('*');
         scrollableElements.forEach(el => {
             if (el.scrollTop > 0) {
@@ -77,78 +240,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 페이지 전환 함수
+    // Switch page function
     function switchPage(pageId, clickedLink) {
         console.log('Switching to page:', pageId);
         
-        // 먼저 스크롤을 즉시 최상단으로 이동
         scrollToTop();
         
-        // 모든 페이지 숨기기
         allPages.forEach(page => {
             page.style.display = 'none';
             page.classList.remove('active');
         });
         
-        // 선택된 페이지 표시
         const targetPage = document.getElementById(pageId);
         if (targetPage) {
             targetPage.style.display = 'block';
-            
-            // 페이지 표시 직후 스크롤
             scrollToTop();
             
-            // 다음 프레임에서 active 클래스 추가하여 페이드 인
             requestAnimationFrame(() => {
                 targetPage.classList.add('active');
                 scrollToTop();
             });
             
-            // 여러 번 확인 (더 확실하게)
             setTimeout(() => scrollToTop(), 50);
             setTimeout(() => scrollToTop(), 100);
             setTimeout(() => scrollToTop(), 200);
             setTimeout(() => scrollToTop(), 300);
             
-            console.log('Page shown:', pageId);
-            
-            // 이전/다음 버튼 업데이트
             updateNavButtons(pageId);
             
-            // 모든 네비게이션 링크 비활성화
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(l => l.classList.remove('active'));
             
-            // 해당 페이지의 네비게이션 링크 활성화
             const correspondingNavLink = document.querySelector(`.nav-link[href="#${pageId}"]`);
             if (correspondingNavLink) {
                 correspondingNavLink.classList.add('active');
             }
         } else {
             console.error('Page not found:', pageId);
-            return;
         }
     }
     
-    // Home 페이지만 표시
-    const homePage = document.getElementById('home');
-    if (homePage) {
-        homePage.style.display = 'block';
-        homePage.classList.add('active');
-        // 초기 이전/다음 버튼 상태 설정
-        updateNavButtons('home');
-    }
-    
-    // 네비게이션 링크에 이벤트 추가
+    // Navigation links
     const navLinks = document.querySelectorAll('.nav-link');
-    console.log('Found nav links:', navLinks.length);
-    
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            // 메뉴 클릭 즉시 최상단으로 스크롤 (함수 사용)
             scrollToTop();
             
             const href = this.getAttribute('href');
@@ -159,10 +296,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 멤버 카드 링크에 이벤트 추가
+    // Team card links
     const teamCardLinks = document.querySelectorAll('.team-card-link');
-    console.log('Found team card links:', teamCardLinks.length);
-    
     teamCardLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -176,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 키보드 네비게이션
+    // Keyboard navigation
     document.addEventListener('keydown', function(e) {
         const activePage = document.querySelector('.page[style*="display: block"]');
         if (!activePage) return;
@@ -195,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // 스크롤 이벤트
+    // Scroll event
     const navbar = document.querySelector('.navbar');
     if (navbar) {
         window.addEventListener('scroll', function() {
@@ -205,5 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    console.log('Navigation initialized');
-});
+    // Export updateNavButtons for use in switchPage
+    window.updateNavButtons = updateNavButtons;
+}
+
