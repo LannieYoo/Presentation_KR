@@ -1,126 +1,178 @@
 <div class="content-section">
-    <h2 class="content-title">Big Picture</h2>
+    <h2 class="content-title">Prolog Planning based on Situation Calculus</h2>
     <div class="info-box">
-        <h3>In Prolog the planning system is built from:</h3>
-        <ul class="info-list">
-            <li>State representation</li>
-            <li>Action representation</li>
-            <li>Preconditions</li>
-            <li>Effects</li>
-            <li>And a planner predicate that uses all of them together</li>
-        </ul>
+        <p><strong>Situation Calculus</strong> is a formal logic framework used to model dynamic worlds where actions change the state of the environment over time.</p>
+        <p>A Prolog planning system based on Situation Calculus consists of five key elements:</p>
     </div>
 </div>
 
 <div class="content-section">
-    <h2 class="content-title">How to Show States</h2>
+    <h2 class="content-title">1. Initial State</h2>
     <div class="info-box">
-        <p>A state is shown using a situation variable <code>S</code> and facts that describe what is true in <code>S</code>.</p>
+        <p>The initial state represents the starting situation of the world, usually denoted as <code>S0</code> or <code>[]</code>.</p>
+        <p>It defines which fluents are true before any action is performed.</p>
         
-        <h3>Common facts:</h3>
-        <ul class="info-list">
-            <li>Robot is at some location</li>
-            <li>Locations are connected</li>
-        </ul>
-
-        <h3>Starting state:</h3>
-        <p>A special situation, often called <code>s0</code>, lists what is true at the beginning.</p>
-
-        <h3>Goal condition:</h3>
-        <p>A fact or a set of facts that must be true at the end. For Simple Navigation: robot is at the target location.</p>
-        
-        <h3>Understanding Facts:</h3>
-        <p>Facts are things that can change over time. They describe what is true in some states but not in others. Examples include <code>at(robot, l1)</code> (robot is at location 1).</p>
-    </div>
-</div>
-
-<div class="content-section">
-    <h2 class="content-title">Actions in Prolog</h2>
-    <div class="info-box">
-        <p>Each action is written as a Prolog term.</p>
-        <p><strong>Example actions:</strong></p>
-        <ul class="info-list">
-            <li><code>move(From, To)</code> - robot moves from one location to another</li>
-        </ul>
-        <p>For each action we later write:</p>
-        <ul class="info-list">
-            <li>When it is allowed (what must be true before)</li>
-            <li>How it changes the state (what becomes true after)</li>
-        </ul>
-    </div>
-</div>
-
-<div class="content-section">
-    <h2 class="content-title">Key Planning Rules</h2>
-    <div class="predicates-grid">
-        <div class="info-box">
-            <h3>Precondition Rule</h3>
-            <p>Checks when an action is allowed in a state</p>
-            <div class="code-example">
-                <code>poss(Action, S)</code>
-            </div>
-            <p class="note-text">Returns true if the action is possible in state S</p>
-        </div>
-        <div class="info-box">
-            <h3>Effect Rule</h3>
-            <p>Shows how an action changes one state into another</p>
-            <div class="code-example">
-                <code>result(Action, S1, S2)</code>
-            </div>
-            <p class="note-text">S2 is the new state after doing Action in state S1</p>
-        </div>
-        <div class="info-box">
-            <h3>Planner Rule</h3>
-            <p>Finds which list of actions is a plan from a state to a goal</p>
-            <div class="code-example">
-                <code>plan(S, G, Plan)</code>
-            </div>
-            <p class="note-text">Plan is a list of actions that go from state S to goal G</p>
-        </div>
-        <div class="info-box">
-            <h3>Holds Rule</h3>
-            <p>Checks if a fact (goal) is true in a given state</p>
-            <div class="code-example">
-                <code>holds(Fluent, S)</code>
-            </div>
-            <p class="note-text">Used to check if goal G is already true in state S</p>
-        </div>
-    </div>
-</div>
-
-<div class="content-section">
-    <h2 class="content-title">How Planning Uses Repetition</h2>
-    <div class="info-box">
-        <h3>Planning Example:</h3>
+        <h3>Example from Blocks World:</h3>
         <div class="code-block">
-            <pre><code>% Base case: goal already satisfied
-plan(S, G, []) :-
-    holds(G, S).
+            <pre><code>% Block positions in initial state []
+on(block(a), location(1), []).
+on(block(b), location(3), []).
+on(block(c), block(a), []).
 
-% Recursive case: find action and continue planning
-plan(S, G, [A|Plan]) :-
-    poss(A, S),
-    result(A, S, S1),
-    plan(S1, G, Plan).</code></pre>
+% Which blocks are clear (nothing on top)
+clear(block(c), []).
+clear(block(b), []).
+clear(location(2), []).
+clear(location(4), []).</code></pre>
         </div>
-
-        <h3>How This Works:</h3>
-        <ul class="info-list">
-            <li><strong>Base case:</strong> If goal G is already true in state S, the plan is empty <code>[]</code></li>
-            <li><strong>Recursive case:</strong> Choose an action A that is possible in S, find the next state S1, then find a plan from S1 to G, and put A together with the rest of the plan</li>
-        </ul>
+        <p class="note-text">The <code>[]</code> parameter represents the initial state (empty action history)</p>
     </div>
 </div>
 
 <div class="content-section">
-    <h2 class="content-title">How Prolog Searches for a Plan</h2>
+    <h2 class="content-title">2. Actions</h2>
     <div class="info-box">
-        <p>Prolog tries one path at a time, and if it fails, it tries a different path.</p>
-        <ul class="info-list">
-            <li>If the goal is already true in the current state → the plan is empty</li>
-            <li>Otherwise → choose an action that is possible in this state, find the next state, then continue planning from that next state</li>
-            <li>If this path does not work, Prolog goes back and tries another action or a different sequence</li>
-        </ul>
+        <p>Actions represent possible operations that can change the world.</p>
+        <p>They are expressed as logical terms that transform one situation into another.</p>
+        
+        <h3>Example from Blocks World:</h3>
+        <div class="code-block">
+            <pre><code>% Action structure
+move(Block, From, To)
+
+% Example actions
+move(block(c), block(a), location(2))  # Move block c from block a to location 2
+move(block(b), location(3), block(c))  # Move block b from location 3 to block c</code></pre>
+        </div>
+        <p class="note-text">Each action is added to the situation history: <code>[move(block(c), block(a), location(2)) | S]</code></p>
     </div>
 </div>
 
+<div class="content-section">
+    <h2 class="content-title">3. Fluents</h2>
+    <div class="info-box">
+        <p>Fluents are properties whose truth value can change across different situations.</p>
+        <p>They describe the state of the world at any given moment.</p>
+        
+        <h3>Example from Blocks World:</h3>
+        <ul class="info-list">
+            <li><code>on(Block, Location, Situation)</code> - describes where a block is located</li>
+            <li><code>clear(Object, Situation)</code> - describes whether an object has nothing on top</li>
+        </ul>
+        
+        <div class="code-block">
+            <pre><code>% Query fluents in different situations
+?- on(block(c), block(a), []).
+true.  % Block c is on block a in initial state
+
+?- on(block(c), location(2), [move(block(c), block(a), location(2))]).
+true.  % Block c is on location 2 after the move</code></pre>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">4. Precondition Axioms</h2>
+    <div class="info-box">
+        <p>Precondition Axioms specify when an action is executable.</p>
+        <p>They define all conditions that must hold for an action to be performed.</p>
+        
+        <h3>Example from Blocks World:</h3>
+        <div class="code-block">
+            <pre><code>% The predicate poss checks if an action sequence is possible
+poss([move(Block, From, To) | S]) :-
+    poss(S),                    % Previous state must be valid
+    block_exists(Block),        % Block must exist
+    clear(Block, S),            % Block must be clear (nothing on top)
+    on(Block, From, S),         % Block must be at From location
+    clear(To, S),               % Target location must be clear
+    Block \= To.                % Cannot move to itself</code></pre>
+        </div>
+        <p class="note-text">All preconditions must be satisfied before executing an action</p>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">5. Successor State Axioms</h2>
+    <div class="info-box">
+        <p>Successor State Axioms define how fluents change when actions are executed.</p>
+        <p>They describe what becomes true or false after an action.</p>
+        
+        <h3>Example from Blocks World:</h3>
+        <div class="code-block">
+            <pre><code>% Case 1: Block X is moved onto Y -> X is now on Y
+on(X, Y, [move(X, Z, Y) | S]) :-
+    poss([move(X, Z, Y) | S]).
+
+% Case 2: Other actions don't affect X being on Y
+on(X, Y, [A | S]) :-
+    poss([A | S]),
+    A \= move(X, Y, _),        % X is not moved away from Y
+    on(X, Y, S).               % X was on Y before
+
+% Case 3: Something is moved away from X -> X becomes clear
+clear(X, [move(Z, X, Y) | S]) :-
+    poss([move(Z, X, Y) | S]).
+
+% Case 4: X remains clear if no action places anything on it
+clear(X, [A | S]) :-
+    poss([A | S]),
+    A \= move(_, _, X),        % Nothing is moved onto X
+    clear(X, S).               % X was clear before</code></pre>
+        </div>
+        <p class="note-text">These axioms handle both direct effects and frame axioms (what stays the same)</p>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">6. Planning</h2>
+    <div class="info-box">
+        <p>Planning is the process of searching for a sequence of actions that transforms the Initial State into a Goal State.</p>
+        <p>Prolog uses recursive search and backtracking to find valid plans.</p>
+        
+        <h3>Planning Algorithm:</h3>
+        <div class="code-block">
+            <pre><code>% Find a plan that achieves the goal
+plan(Goal, Plan) :-
+    bposs(Plan),               % Generate possible action sequences
+    call(Goal).                % Check if goal is satisfied
+
+% Generate action sequences starting from shortest
+bposs(S) :-
+    tryposs([], S).
+
+tryposs(S, S) :-
+    poss(S).                   % Check if sequence is valid
+
+tryposs(X, S) :-
+    tryposs([_ | X], S).       % Try longer sequences</code></pre>
+        </div>
+        
+        <h3>Example Queries:</h3>
+        <div class="code-block">
+            <pre><code>% Plan to move block c to location 2
+?- plan(on(block(c), location(2), Plan), Plan).
+Plan = [move(block(c), block(a), location(2))].
+
+% Plan to stack block a on block b
+?- plan(on(block(a), block(b), Plan), Plan).
+Plan = [move(block(a), location(1), block(b)), 
+        move(block(c), block(a), location(2))].</code></pre>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <h2 class="content-title">Summary</h2>
+    <div class="info-box">
+        <p>In conclusion, Prolog planning based on Situation Calculus models dynamic environments through:</p>
+        <ul class="info-list">
+            <li><strong>Initial State</strong> - defines the starting configuration</li>
+            <li><strong>Actions</strong> - operations that change the world</li>
+            <li><strong>Fluents</strong> - properties that change over time</li>
+            <li><strong>Precondition Axioms</strong> - conditions for action execution</li>
+            <li><strong>Successor State Axioms</strong> - effects of actions on fluents</li>
+        </ul>
+        <p>The planner systematically searches for valid action sequences to satisfy goals, making this approach powerful for automated reasoning and intelligent decision-making.</p>
+    </div>
+</div>
